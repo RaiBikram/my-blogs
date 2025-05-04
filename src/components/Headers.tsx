@@ -4,6 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
+import { Button } from "./ui/button";
 
 export default function BlogLayout() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,7 +28,7 @@ export default function BlogLayout() {
                 href="/"
                 className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold"
               >
-                Sahand's Blog
+                Bikram's Blog
               </Link>
             </div>
 
@@ -72,12 +80,14 @@ export default function BlogLayout() {
             </button>
 
             {/* Sign In Button */}
-            <Link
-              href="/signin"
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-            >
-              Sign In
-            </Link>
+            <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </button>
           </div>
         </div>
       </header>
