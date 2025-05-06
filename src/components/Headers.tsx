@@ -4,16 +4,13 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
-import { Button } from "./ui/button";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
-export default function BlogLayout() {
+export default function BlogLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   const [searchQuery, setSearchQuery] = useState("");
   const { theme, setTheme } = useTheme();
 
@@ -92,17 +89,14 @@ export default function BlogLayout() {
         </div>
       </header>
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <Link href="/" className="text-red-500 hover:text-red-600">
           Home
         </Link>
-      </div>
+      </div> */}
 
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Content goes here */}
-      </main>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</main>
     </div>
   );
 }

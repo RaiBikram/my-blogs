@@ -26,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{baseTheme:[dark,neobrutalism]}}>
-      <html lang="en"suppressHydrationWarning>
+    <ClerkProvider appearance={{ baseTheme: [dark, neobrutalism] }}>
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -37,9 +37,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Headers />
-
-            {children}
+            <Headers>{children}</Headers>
           </ThemeProvider>
         </body>
       </html>
