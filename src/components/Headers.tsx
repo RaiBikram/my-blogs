@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { dark, neobrutalism } from "@clerk/themes";
+import { Button } from "./ui/button";
 
 export default function BlogLayout({
   children,
@@ -13,6 +15,8 @@ export default function BlogLayout({
 }>) {
   const [searchQuery, setSearchQuery] = useState("");
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
@@ -68,23 +72,25 @@ export default function BlogLayout({
             </nav>
 
             {/* Dark Mode Toggle */}
-            <button
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 mx-2"
-              aria-label="Toggle dark mode"
-            >
-              {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-            </button>
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 mx-2"
+                aria-label="Toggle dark mode"
+              >
+                {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+            )}
 
             {/* Sign In Button */}
-            <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-              <SignedOut>
+            <div className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+              <SignedOut >
                 <SignInButton />
               </SignedOut>
-              <SignedIn>
+              <SignedIn  >
                 <UserButton />
               </SignedIn>
-            </button>
+            </div>
           </div>
         </div>
       </header>

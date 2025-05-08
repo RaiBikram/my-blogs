@@ -26,7 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{ baseTheme: [dark, neobrutalism] }}>
+    <ClerkProvider
+    appearance={{
+      baseTheme: [dark],
+      
+    }}
+  >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
