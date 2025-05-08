@@ -3,7 +3,7 @@ import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 
 export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
   
   if (!WEBHOOK_SECRET) {
     throw new Error("Please add WEBHOOK_SECRET to your environment variables");
