@@ -5,8 +5,6 @@ import Link from "next/link";
 import { Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { dark, neobrutalism } from "@clerk/themes";
-import { Button } from "./ui/button";
 
 export default function BlogLayout({
   children,
@@ -84,10 +82,10 @@ export default function BlogLayout({
 
             {/* Sign In Button */}
             <div className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-              <SignedOut >
+              <SignedOut>
                 <SignInButton />
               </SignedOut>
-              <SignedIn  >
+              <SignedIn>
                 <UserButton />
               </SignedIn>
             </div>

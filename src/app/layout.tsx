@@ -4,7 +4,7 @@ import "./globals.css";
 import Headers from "@/components/Headers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark, neobrutalism } from "@clerk/themes";
+import { dark } from "@clerk/themes";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -27,11 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-    appearance={{
-      baseTheme: [dark],
-      
-    }}
-  >
+      appearance={{
+        baseTheme: [dark],
+      }}
+    >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
