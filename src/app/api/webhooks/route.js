@@ -94,15 +94,15 @@ export async function POST(req) {
     }
   }
 
-  if (eventType === "user.deleted") {
-    const { id } = evt.data || {};
+  if (eventType === "user?.deleted") {
+    const { id } = evt.data;
 
     if (!id) {
       return new Response("Missing user ID in delete event", { status: 400 });
     }
 
     try {
-      await deleteUser(id.toString());
+      await deleteUser(id);
     } catch (error) {
       console.error("Error deleting user:", error);
       return new Response("Error occurred", { status: 400 });
