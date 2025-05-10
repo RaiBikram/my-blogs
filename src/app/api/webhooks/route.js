@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { createOrUpdateUser, deleteUser } from "@/lib/actions/user";
-import { users } from "@clerk/backend";
+import { clerkClient } from "@clerk/nextjs/server";
 
 export async function POST(req) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
@@ -22,7 +22,7 @@ export async function POST(req) {
   }
 
   const payload = await req.json();
-  console.log("Webhook Payload:", payload);
+  // console.log("Webhook Payload:", payload);
 
   const body = JSON.stringify(payload);
   const wh = new Webhook(WEBHOOK_SECRET);
@@ -40,7 +40,7 @@ export async function POST(req) {
   }
 
   const eventType = evt?.type;
-  console.log("Webhook event type:", eventType);
+  // console.log("Webhook event type:", eventType);
 
   if (!evt?.data) {
     console.error("No data in webhook event");
@@ -58,13 +58,14 @@ export async function POST(req) {
 
   const email_address = email_addresses?.[0]?.email_address || "";
 
-  console.log("id:", id);
-  console.log("first_name:", first_name);
-  console.log("last_name:", last_name);
-  console.log("image_url:", image_url);
-  console.log("email_address:", email_address);
-  console.log("username:", username);
+  // console.log("id:", id);
+  // console.log("first_name:", first_name);
+  // console.log("last_name:", last_name);
+  // console.log("image_url:", image_url);
+  // console.log("email_address:", email_address);
+  // console.log("username:", username);
 
+// create or update 
   if (eventType === "user.created") {
     try {
       const user = await createOrUpdateUser({
@@ -76,8 +77,9 @@ export async function POST(req) {
         username,
       });
 
+
       try {
-        await users.updateUserMetadata(id, {
+        await clerkClient.users.updateUserMetadata(id, {
           publicMetadata: {
             userMongoId: user._id,
             isAdmin: user.isAdmin,
@@ -92,6 +94,7 @@ export async function POST(req) {
     }
   }
 
+  //delete
   if (eventType === "user.deleted") {
     try {
       await deleteUser(id);

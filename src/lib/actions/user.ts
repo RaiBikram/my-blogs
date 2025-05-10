@@ -11,9 +11,9 @@ export const createOrUpdateUser = async ({
   email_address,
   username,
 }: CreateOrUpdateUserInput) => {
-  console.log("id", id)
-  console.log("email:", email_address)
-  console.log("first name:", first_name)
+  // console.log("id", id)
+  // console.log("email:", email_address)
+  // console.log("first name:", first_name)
 
   if (!id || !first_name || !email_address || !image_url) {
     console.error("Please provide your credentials");
@@ -34,7 +34,7 @@ export const createOrUpdateUser = async ({
       },
       { new: true, upsert: true } // Return updated doc or create if not found
     );
-    console.log("User created/updated:", user);
+    // console.log("User created/updated:", user);
     return user;
   } catch (error) {
     console.error("Error in createOrUpdateUser:", error);
