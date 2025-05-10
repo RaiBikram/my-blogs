@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { createOrUpdateUser, deleteUser } from "@/lib/actions/user";
-import { clerkClient } from "@clerk/nextjs/server";
+import { users } from "@clerk/backend";
 
 export async function POST(req) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
@@ -77,7 +77,7 @@ export async function POST(req) {
       });
 
       try {
-        await clerkClient.users.updateUserMetadata(id, {
+        await users.updateUserMetadata(id, {
           publicMetadata: {
             userMongoId: user._id,
             isAdmin: user.isAdmin,
