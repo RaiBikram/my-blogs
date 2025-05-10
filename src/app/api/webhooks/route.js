@@ -1,7 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { createOrUpdateUser, deleteUser } from "@/lib/actions/user";
-import { clerkClient } from "@clerk/nextjs/server";
+
+// Use the dedicated Clerk Node.js SDK instead of the Next.js client
+import { Clerk } from '@clerk/clerk-sdk-node';
 
 export async function POST(req) {
   // Check for webhook secret
@@ -90,32 +92,30 @@ export async function POST(req) {
         isAdmin: user.isAdmin
       });
 
-      // Verify clerkClient is available
-      if (!clerkClient) {
-        console.error("clerkClient is undefined - check Clerk SDK import and environment variables");
-        // Continue execution without throwing, as the user was still created/updated
-      } else {
-        try {
-          // Ensure the MongoDB _id is converted to string
-          const userMongoId = user._id?.toString();
-          
-          console.log("Updating Clerk metadata with:", {
+      try {
+        // Ensure the MongoDB _id is converted to string
+        const userMongoId = user._id?.toString();
+        
+        console.log("Updating Clerk metadata with:", {
+          userMongoId,
+          isAdmin: Boolean(user.isAdmin)
+        });
+        
+        // Initialize the Clerk SDK with your secret key
+        const clerk = new Clerk({ apiKey: process.env.CLERK_SECRET_KEY });
+        
+        // Use the Clerk Node.js SDK to update the user metadata
+        await clerk.users.updateUser(id, {
+          publicMetadata: {
             userMongoId,
-            isAdmin: Boolean(user.isAdmin)
-          });
-          
-          await clerkClient.users.updateUserMetadata(id, {
-            publicMetadata: {
-              userMongoId,
-              isAdmin: Boolean(user.isAdmin),
-            },
-          });
-          
-          console.log("Clerk metadata updated successfully");
-        } catch (metadataError) {
-          console.error("Error updating Clerk metadata:", metadataError);
-          // Don't return an error response, continue execution
-        }
+            isAdmin: Boolean(user.isAdmin),
+          },
+        });
+        
+        console.log("Clerk metadata updated successfully");
+      } catch (metadataError) {
+        console.error("Error updating Clerk metadata:", metadataError);
+        // Don't return an error response, continue execution
       }
     } catch (error) {
       console.error("Error creating or updating user:", error);
