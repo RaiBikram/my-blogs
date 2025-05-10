@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 
 // Page metadata
 export const metadata: Metadata = {
-  title: "My App",
-  description: "A modern Next.js app with Clerk & ShadCN UI",
+  title: "Bikram's Blogs",
+  description: "This is my blogs site",
 };
 
 // Root layout
