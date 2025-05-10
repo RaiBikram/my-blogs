@@ -11,6 +11,7 @@ export const createOrUpdateUser = async ({
   email_address,
   username,
 }: CreateOrUpdateUserInput) => {
+  console.log("action id:", id)
   try {
     await connectToDatabase();
     const user = await UserModel.findOneAndUpdate(
