@@ -3,16 +3,15 @@ import { headers } from "next/headers";
 import { createOrUpdateUser, deleteUser } from "@/lib/actions/user";
 import { clerkClient } from "@clerk/nextjs/server";
 
-
-/**
- * @typedef {Object} UserData
- * @property {string} id
- * @property {string} first_name
- * @property {string} last_name
- * @property {string} image_url
- * @property {Array<{ email_address: string }>} email_addresses
- * @property {string} username
- */
+// /**
+//  * @typedef {Object} UserData
+//  * @property {string} id
+//  * @property {string} first_name
+//  * @property {string} last_name
+//  * @property {string} image_url
+//  * @property {Array<{ email_address: string }>} email_addresses
+//  * @property {string} username
+//  */
 
 export async function POST(req) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
@@ -35,6 +34,7 @@ export async function POST(req) {
   const payload = await req.json();
   const body = JSON.stringify(payload);
 
+  console.log("Route body:", body);///++++++++++++++++++++++++++++++=
   const svix = new Webhook(WEBHOOK_SECRET);
   let evt;
 
@@ -68,19 +68,19 @@ export async function POST(req) {
       try {
         const user = await createOrUpdateUser({
           id: userData.id,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
+          first_name: userData?.first_name,
+          last_name: userData?.last_name,
           email_address,
-          username: userData.username,
-          image_url: userData.image_url || "",
+          username: userData?.username,
+          image_url: userData?.image_url || "",
         });
-
+        console.log("Route user: ", user);//++++++++++++++++++++++++
         if (user && eventType === "user.created") {
           try {
             await clerkClient.users.updateUser(userData.id, {
               publicMetadata: {
-                userMongoId: user._id,
-                isAdmin: user.isAdmin,
+                userMongoId: user?._id,
+                isAdmin: user?.isAdmin,
               },
             });
           } catch (error) {
@@ -96,7 +96,6 @@ export async function POST(req) {
 
   if (eventType === "user?.deleted") {
     const { id } = evt.data;
-
     if (!id) {
       return new Response("Missing user ID in delete event", { status: 400 });
     }

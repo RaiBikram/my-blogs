@@ -23,23 +23,24 @@ export const createOrUpdateUser = async ({
           email: email_address,
           username: username,
         },
-      },{new:true, upsert:true} //new: Return updated doc, upsert:create if missing
+      },
+      { new: true, upsert: true } //new: Return updated doc, upsert:create if missing
     );
+    console.log("Updated and created user at action:", user);//++++++++++++++++++++++
     return user;
   } catch (error) {
-console.error("Error:", error)
-throw error
+    console.error("Error:", error);
+    throw error;
   }
 };
 
-//delete 
+//delete
 
-export const deleteUser = async(id:string)=>{
+export const deleteUser = async (id: string) => {
   try {
     await connectToDatabase();
-    await UserModel.findByIdAndDelete({clerckId:id})
+    await UserModel.findByIdAndDelete({ clerckId: id });
   } catch (error) {
     console.error("Error deleting user:", error);
   }
-}
-
+};
