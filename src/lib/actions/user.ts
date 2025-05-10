@@ -21,7 +21,7 @@ export const createOrUpdateUser = async ({
           lastName: last_name,
           profilePicture: image_url,
           email: email_address,
-          username: username,
+          username: username
         },
       },{new:true, upsert:true} //new: Return updated doc, upsert:create if missing
     );
