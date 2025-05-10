@@ -11,6 +11,9 @@ export const createOrUpdateUser = async ({
   email_address,
   username,
 }: CreateOrUpdateUserInput) => {
+  console.log("id", id)
+  console.log("email:", email_address)
+  console.log("first name:", first_name)
  if(!id || !first_name || !email_address || !image_url){
   console.error("Please provide your credentials")
  }
