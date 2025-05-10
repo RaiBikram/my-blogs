@@ -8,7 +8,7 @@ export async function POST(req) {
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
-      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
+      "Please add CLERK_WEBHOOK_SIGNING_SECRET to your .env file"
     );
   }
 
@@ -18,16 +18,15 @@ export async function POST(req) {
   const svix_signature = headerPayload.get("svix-signature");
 
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Error occurred -- no svix headers", { status: 400 });
+    return new Response("Missing svix headers", { status: 400 });
   }
 
   const payload = await req.json();
-  // console.log("Webhook Payload:", payload);
-
   const body = JSON.stringify(payload);
-  const wh = new Webhook(WEBHOOK_SECRET);
 
+  const wh = new Webhook(WEBHOOK_SECRET);
   let evt;
+
   try {
     evt = wh.verify(body, {
       "svix-id": svix_id,
@@ -35,32 +34,23 @@ export async function POST(req) {
       "svix-signature": svix_signature,
     });
   } catch (err) {
-    console.error("Error verifying webhook:", err);
-    return new Response("Error occurred", { status: 400 });
+    console.error("Webhook verification failed:", err);
+    return new Response("Invalid signature", { status: 400 });
   }
 
-  const eventType = evt?.type;
-  // console.log("Webhook event type:", eventType);
+  const eventType = evt.type;
+  const data = evt.data;
 
-  if (!evt?.data) {
-    console.error("No data in webhook event");
-    return new Response("Error: No event data", { status: 400 });
+  if (!data) {
+    return new Response("Missing event data", { status: 400 });
   }
 
   const { id, first_name, last_name, image_url, email_addresses, username } =
-    evt.data;
+    data;
 
   const email_address = email_addresses?.[0]?.email_address || "";
 
-  // console.log("id:", id);
-  // console.log("first_name:", first_name);
-  // console.log("last_name:", last_name);
-  // console.log("image_url:", image_url);
-  // console.log("email_address:", email_address);
-  // console.log("username:", username);
-
-  // create or update
-  if (eventType === "user.created") {
+  if (eventType === "user.created" || eventType === "user.updated") {
     try {
       const user = await createOrUpdateUser({
         id,
@@ -71,31 +61,32 @@ export async function POST(req) {
         username,
       });
 
-      try {
-        await clerkClient.users.updateUserMetadata(user.clerkId, {
-          publicMetadata: {
-            userMongoId: user._id,
-            isAdmin: user.isAdmin,
-          },
-        });
-      } catch (error) {
-        console.log("Error updating user metadata:", error);
+      if (user && eventType === "user.created") {
+        try {
+          await clerkClient.users.updateUser(id, {
+            publicMetadata: {
+              userMongoId: user._id,
+              isAdmin: user.isAdmin,
+            },
+          });
+        } catch (err) {
+          console.error("Error updating Clerk metadata:", err);
+        }
       }
-    } catch (error) {
-      console.log("Error creating or updating user:", error);
-      return new Response("Error occurred", { status: 400 });
+    } catch (err) {
+      console.error("Error syncing user with DB:", err);
+      return new Response("Error syncing user", { status: 500 });
     }
   }
 
-  //delete
   if (eventType === "user.deleted") {
     try {
       await deleteUser(id);
-    } catch (error) {
-      console.log("Error deleting user:", error);
-      return new Response("Error occurred", { status: 400 });
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      return new Response("Error deleting user", { status: 500 });
     }
   }
 
-  return new Response("", { status: 200 });
+  return new Response("Webhook processed", { status: 200 });
 }
