@@ -29,7 +29,7 @@ export const createOrUpdateUser = async ({
           lastName: last_name,
           profilePicture: image_url,
           email: email_address,
-          username: username,
+          username: username || "",
         },
       },
       { new: true, upsert: true } // Return updated doc or create if not found
