@@ -15,7 +15,7 @@ export const createOrUpdateUser = async ({
   // console.log("email:", email_address)
   // console.log("first name:", first_name)
 
-  if (!id || !first_name || !email_address || !image_url) {
+  if (!id || !first_name || !email_address || !image_url || !username) {
     console.error("Please provide your credentials");
     return null; 
   }
