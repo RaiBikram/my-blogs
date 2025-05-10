@@ -2,7 +2,7 @@ import { CreateOrUpdateUserInput } from "@/types/schema-data";
 import UserModel from "../models/userModel";
 import { connectToDatabase } from "../mongodb/db";
 
-//create and update
+// Create or update user
 export const createOrUpdateUser = async ({
   id,
   first_name,
@@ -24,22 +24,22 @@ export const createOrUpdateUser = async ({
           username: username,
         },
       },
-      { new: true, upsert: true } //new: Return updated doc, upsert:create if missing
+      { new: true, upsert: true } // Return updated doc or create if not found
     );
-    console.log("Updated and created user at action:", user);//++++++++++++++++++++++
+    console.log("User created/updated:", user);
     return user;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in createOrUpdateUser:", error);
     throw error;
   }
 };
 
-//delete
-
+// Delete user
 export const deleteUser = async (id: string) => {
   try {
     await connectToDatabase();
-    await UserModel.findByIdAndDelete({ clerckId: id });
+    await UserModel.findOneAndDelete({ clerkId: id });
+    console.log("User deleted with clerkId:", id);
   } catch (error) {
     console.error("Error deleting user:", error);
   }

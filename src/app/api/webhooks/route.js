@@ -33,8 +33,6 @@ export async function POST(req) {
 
   const payload = await req.json();
   const body = JSON.stringify(payload);
-
-  console.log("Route body:", body);///++++++++++++++++++++++++++++++=
   const svix = new Webhook(WEBHOOK_SECRET);
   let evt;
 
