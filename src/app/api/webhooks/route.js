@@ -48,20 +48,21 @@ export async function POST(req) {
     });
   }
 
-  if (!evt || !evt.data) {
-    console.log("not getting event data");
-    return;
-  }
-
   const eventType = evt?.type;
   console.log(`Webhook with ID ${evt.data.id} and type ${eventType}`);
 
-  // console.log("Webhook body:", body);
+  console.log("Webhook body:", body);
 
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, first_name, last_name, image_url, email_addresses, username } =
-      evt?.data;
-    console.log("event data:", evt.data);
+      evt.data;
+    console.log("id:", id);
+    console.log("first_name:", first_name);
+    console.log("last_name:", last_name);
+    console.log("image_url:", image_url);
+    console.log("email_addresses:", email_addresses);
+    console.log("username:", username);
+
     try {
       const user = await createOrUpdateUser(
         id,
