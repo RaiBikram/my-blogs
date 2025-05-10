@@ -29,7 +29,6 @@ export async function POST(req) {
   // Get the body
   const payload = await req.json();
   const body = JSON.stringify(payload);
-console.log("Boday", body)
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
@@ -49,19 +48,19 @@ console.log("Boday", body)
     });
   }
 
-if(!evt || !evt.data){
-  console.log("not getting event data")
-  return 
-}
+  if (!evt || !evt.data) {
+    console.log("not getting event data");
+    return;
+  }
   const { id } = evt?.data;
   const eventType = evt?.type;
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
+  // console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
+  // console.log("Webhook body:", body);
 
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, first_name, last_name, image_url, email_addresses, username } =
       evt?.data;
-
+    console.log("event data:", evt.data);
     try {
       const user = await createOrUpdateUser(
         id,
