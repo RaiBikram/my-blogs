@@ -11,7 +11,9 @@ export const createOrUpdateUser = async ({
   email_address,
   username,
 }: CreateOrUpdateUserInput) => {
-  console.log("action id:", id)
+ if(!id || !first_name || !email_address || !image_url){
+  console.error("Please provide your credentials")
+ }
   try {
     await connectToDatabase();
     const user = await UserModel.findOneAndUpdate(
