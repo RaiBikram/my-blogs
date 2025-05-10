@@ -71,9 +71,8 @@ export async function POST(req) {
         username,
       });
 
-      console.log("User data: ", user);
       try {
-        await clerkClient.users.updateUserMetadata(id, {
+        await clerkClient.users.updateUserMetadata(user.clerkId, {
           publicMetadata: {
             userMongoId: user._id,
             isAdmin: user.isAdmin,
