@@ -1,17 +1,12 @@
-"use client"
-import CreatePost from "@/components/dashboard/create-post"
-import React from 'react'
-import { useUser } from "@clerk/nextjs"
-type Props = {}
+"use client";
+import CreatePost from "@/components/dashboard/create-post";
+import React from "react";
 
-export default function page({}: Props) {
-  const {isSignedIn,user, isLoaded}=useUser();
-  if(!isLoaded){
-    return null
-  }
+
+export default function page() {
   return (
     <div>
-        <CreatePost/>
+      <CreatePost />
     </div>
-  )
+  );
 }

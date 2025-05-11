@@ -122,3 +122,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.ql-editor {
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  min-height: 18rem;
+  line-height: 1.6;
+}
+
+.ql-container {
+  border-radius: 0.5rem; /* optional rounded corners */
+}
+
+/* Optional: Style placeholder */
+.ql-editor.ql-blank::before {
+  color: #aaa;
+  font-style: italic;
+}

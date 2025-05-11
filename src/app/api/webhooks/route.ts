@@ -26,10 +26,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    throw new Error("Please add CLERK_WEBHOOK_SIGNING_SECRET to your .env file");
+    throw new Error(
+      "Please add CLERK_WEBHOOK_SIGNING_SECRET to your .env file"
+    );
   }
 
-  const headerPayload =await headers();
+  const headerPayload = await headers() as Headers;
   const svix_id =headerPayload.get("svix-id");
   const svix_timestamp = headerPayload.get("svix-timestamp");
   const svix_signature = headerPayload.get("svix-signature");
@@ -61,7 +63,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     return new Response("Missing event data", { status: 400 });
   }
 
-  const { id, first_name, last_name, image_url, email_addresses, username } = data;
+  const { id, first_name, last_name, image_url, email_addresses, username } =
+    data;
 
   const email_address = email_addresses?.[0]?.email_address ?? "";
 
