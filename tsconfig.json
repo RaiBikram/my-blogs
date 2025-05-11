@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/webhooks/route.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/webhooks/route.ts", ".next/types/app/dashboard/create-post/page.tsx", ".next/types/app/dashboard/create-post/page.tsx"],
   "exclude": ["node_modules"]
 }
