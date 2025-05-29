@@ -1,4 +1,4 @@
-name: Bloggy app
+name: Blog App
 
 # Trigger the workflow only on push to the main branch
 on:
